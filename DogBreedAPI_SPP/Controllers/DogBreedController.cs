@@ -23,12 +23,29 @@ namespace DogBreedAPI_SPP.Controllers
 
 
 
-        [HttpGet]
-        public async Task<IEnumerable<DogBreedDTO>> GetDogImageByBreed(string breed)
-        {
-            var result = await _dogBreederProcessService.Process(breed.ToLower());
+        //[HttpGet]  I
+        //public async Task<IEnumerable<DogBreedDTO>> GetDogImageByBreed(string breed)
+        //{
+        //    var result = await _dogBreederProcessService.Process(breed.ToLower());
+        //We can use Automapper to map object to DTO, here I just wanted to show the use of DTO. The benefit of DTO is instead of returning all properties of object we just expose what is needed
+        //    return new List<DogBreedDTO>() {  new DogBreedDTO { ImageUrl = result}  }};
+        //}
 
-            return new List<DogBreedDTO>() { new DogBreedDTO { ImageUrl = "https://images.dog.ceo/breeds/hound-english/n02089973_3265.jpg" }, new DogBreedDTO { ImageUrl = "https://images.dog.ceo/breeds/hound-english/n02089973_4359.jpg" }, new DogBreedDTO { ImageUrl = "https://images.dog.ceo/breeds/hound-ibizan/n02091244_1283.jpg" } };
+
+        //If we don't put attribute HttpGet verb then by default it defaults to [HttpGet]
+        [HttpGet("{dogBreed}")]
+        public async Task<ActionResult<IEnumerable<DogBreedDTO>>> GetDogImageByBreed(string dogBreed)
+        {
+            if (string.IsNullOrWhiteSpace(dogBreed.Trim())) {
+                return BadRequest();
+            }
+            var result = await _dogBreederProcessService.Process(dogBreed.Trim().ToLower());
+
+            if (string.IsNullOrWhiteSpace(result)) { 
+               return NotFound();
+            }
+            //We can use Automapper to map object to DTO, here I just wanted to show the use of DTO. The benefit of DTO is instead of returning all properties of object we just expose what is needed
+            return Ok(new List<DogBreedDTO>() { new DogBreedDTO { ImageUrl = result}  });
         }
     }
 }
