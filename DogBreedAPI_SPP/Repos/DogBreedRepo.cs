@@ -13,9 +13,11 @@ namespace DogBreedAPI_SPP.Repos
     public class DogBreedRepo : IDogBreedRepo
     {
         private readonly string DBConnectionString;
+        private readonly ILogger<DogBreedRepo> _logger;
 
-        public DogBreedRepo(IConfiguration configuration)
+        public DogBreedRepo(ILogger<DogBreedRepo>  logger ,IConfiguration configuration)
         {
+            _logger = logger;
             DBConnectionString = configuration.GetValue<string>("DBConnection");
         }
 
@@ -32,8 +34,9 @@ namespace DogBreedAPI_SPP.Repos
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error in GetAllBreeds with Error : {ex.Message}  and Stack trace : {ex.StackTrace}");
 
-                throw;
+                return new List<Dog>();
             }
         }
         //public async Task<bool> InsertRecord(Dog dog)
@@ -85,8 +88,9 @@ namespace DogBreedAPI_SPP.Repos
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error in InsertRecord with Error : {ex.Message}  and Stack trace : {ex.StackTrace}");
 
-                throw;
+                return false;
             }
 
         }
