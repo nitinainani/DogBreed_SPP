@@ -1,0 +1,21 @@
+USE [TestDB]
+GO
+
+/****** Object:  Table [dbo].[DogBreed]    Script Date: 2/14/2024 10:01:48 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DogBreed](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[DogBreedName] [varchar](250) NULL,
+	[ImageUrl] [varchar](max) NOT NULL,
+	[CreateDate] [datetime] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[DogBreed] ADD  CONSTRAINT [DF_DogBreed_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
+GO
+
